@@ -1,7 +1,28 @@
 @import "default";
 
-#load {
-  width: 200px;
-  height: 200px;
-  background: $primaryColor;
+#container {
+  padding: 15px;
+}
+
+.navbar-item.is-active {
+  background: #edd35e !important;
+}
+
+.todo{
+  border: 2px solid #d3d3d3;
+  border-radius: 3px;
+  margin-top: 8px;
+  .todoControls {
+    text-align: center;
+    div {
+      margin-top:5px;
+      .fa-trash {
+        cursor: pointer;
+        transition: transform .1s linear;
+      }
+      .fa-trash:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
 }
