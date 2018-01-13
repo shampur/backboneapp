@@ -4,6 +4,8 @@ var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var colors = require('colors');
+var exec = require('sync-exec');
+
 
 var jsConfig = {
     jssrc: './js/',
@@ -18,7 +20,9 @@ var jsConfig = {
     jquery: './node_modules/jquery/dist/jquery.slim.js',
     backbone: './node_modules/backbone/backbone-min.js',
     underscore: './node_modules/underscore/underscore.js',
-    imagessrc: './images/'
+    handlebars: './node_modules/handlebars/dist/handlebars.runtime.js',
+    imagessrc: './images/',
+    templatesdir: './templates/'
 };
 
 
@@ -45,10 +49,20 @@ gulp.task('watch', function(){
     gulp.watch(jsConfig.sasssrc + '**', ['build-css']);
     gulp.watch(jsConfig.jssrc + '**', ['build-js']);
     gulp.watch('./index.html', ['html']);
+    gulp.watch(jsConfig.templatesdir + '*.handlebars', ['build-js']);
 });
 
-gulp.task('build-js', function() {
-        gulp.src([jsConfig.jssrc + '**'])
+gulp.task('build-js', ['templates'], function() {
+        gulp.src([jsConfig.templatesdir + 'templates.js',
+                jsConfig.jssrc + 'init.js',
+                jsConfig.jssrc + 'layout/**',
+                jsConfig.jssrc + 'about/**',
+                jsConfig.jssrc + 'todos/todo.model.js',
+                jsConfig.jssrc + 'todos/todos.collection.js',
+                jsConfig.jssrc + 'todos/todo.view.js',
+                jsConfig.jssrc + 'todos/todos.view.js',
+                jsConfig.jssrc + 'router.js'
+        ])
         .pipe(sourcemaps.init())
         .pipe(concat('bundle.js'))
         .pipe(sourcemaps.write(jsConfig.jsmapsdir))
@@ -69,9 +83,25 @@ gulp.task('dependencies', function() {
         .pipe(gulp.dest(jsConfig.builddir));
     gulp.src(jsConfig.imagessrc + '**')
         .pipe(gulp.dest(jsConfig.builddir + 'images/'));
+    gulp.src(jsConfig.handlebars)
+        .pipe(gulp.dest(jsConfig.jsbuilddir));
     gulp.src([jsConfig.jquery, jsConfig.underscore, jsConfig.backbone])
         .pipe(concat('vendor-bundle.js'))
         .pipe(gulp.dest(jsConfig.jsbuilddir));
+});
+
+gulp.task('templates', function() {
+    exec('npm run compileTemplates');
+    console.log(colors.green('Templates Compiled Successfully!!'));
+    /*
+    exec('npm run compileTemplates', function(err, stdout, stderr){
+        if(err) {
+            console.log(colors.red(err));
+        } else {
+            console.log(colors.green('Templates Compiled Successfully!!'));
+        }
+    });
+    */
 });
 
 gulp.task('html', function () {

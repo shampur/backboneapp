@@ -1,0 +1,30 @@
+<div class="column is-three-quarters todo">
+    <div class="columns is-desktop">
+        <div class="column is-four-fifths">
+            <div class="title is-5">
+                {{title}}
+            </div>
+            <div class="content is-small">
+                {{description}}
+            </div>
+            <div>
+                <span class="tag is-warning">created on : {{create_ts}}</span>
+            </div>
+            <div>
+                <span class="tag is-warning">updated on : {{update_ts}}</span>
+            </div>
+        </div>
+        <div class="column is-one-fifth todoControls">
+            {{#if completed}}
+                <span class="tag is-success">Completed</span>
+            {{else}}
+                <button class="button is-small">
+                    Mark as completed
+                </button>
+            {{/if}}
+            <div>
+                <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+</div>
